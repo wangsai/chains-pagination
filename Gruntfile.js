@@ -31,7 +31,7 @@ module.exports = function(grunt) {
     pagination: {
       test: {
         options: {
-          data: grunt.file.readJSON('test/info.json'),
+          data: function(){return grunt.file.readJSON('test/info.json');},
           dest: '_site/',
           fileNameTemplate: 'page{{index}}/index.html'
         }

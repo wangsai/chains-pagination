@@ -20,23 +20,24 @@ module.exports = function(grunt) {
   grunt.registerMultiTask('pagination', 'pagination.', function() {
     // Merge task-specific and/or target-specific options with these defaults.
     var options = this.options({
-      data: [], //the Data
+      data: [], //the Data. It can be an array or a function that return an array.
       perPage: 10, //how many items each page
       dest: '/',  //destination folder
       fileNameTemplate: 'page{{index}}',  //file name of each page. refer: http://gruntjs.com/api/grunt.template
     });
 
+    if(grunt.util.kindOf(options.data) === 'function')
+    {
+      options.data = options.data();
+    }
+
     var totalPageNum = Math.floor((options.data.length + options.perPage)/options.perPage),
       totalPages = _.range(1, totalPageNum + 1);
-
-      grunt.log.write('data.length:' + options.data.length);
-    grunt.log.write('totalPageNum:' + totalPageNum);
     
     totalPages.forEach(function(index){
       var items = _.first(options.data, options.perPage),
             fileName = options.fileNameTemplate.replace(/(\{\{\s*index\s*\}\})/g, index);
 
-            grunt.log.write('fileName:' + fileName);
       var aPage = {
         items: items, //data of current page
         index: index, //current page index
